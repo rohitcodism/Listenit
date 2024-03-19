@@ -1,10 +1,19 @@
 import './App.css'
+import Login from './components/login'
 
 function App() {
 
   return (
-    <div>
-      App Hello!!
+    <div
+      style={{
+        width : "100vw",
+        height : "100vh"
+      }}
+    >
+        {/* Logo */}
+
+        {/* Login Screen */}
+        <Login />
     </div>
   )
 }
