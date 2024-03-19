@@ -1,51 +1,57 @@
 import { Button, Container, Typography } from "@mui/material";
-import {  logo48 } from "../assets";
-
+import { logo48 } from "../assets";
+import { loginUrl } from "../../server/utils/ListenIt.js";
 
 function Login() {
     return (
         <Container
             sx={{
-                display : "flex",
-                flexDirection : "column",
-                justifyContent : "space-evenly",
-                alignItems : "center",
-                height : "100vh"
-
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+                alignItems: "center",
+                height: "100vh",
             }}
         >
-            Login
             <div
                 style={{
-                    display : "flex",
-                    justifyContent : "space-evenly",
+                    display: "flex",
+                    justifyContent: "space-evenly",
                 }}
             >
                 <img src={logo48} alt="logo" />
                 <Typography
                     variant="h3"
                     sx={{
-                        fontWeight : 'bold',
-                        fontFamily : "DotGothic16, sans-serif"
+                        fontWeight: "bold",
+                        fontFamily: "Poppins, sans-serif",
                     }}
                 >
                     ListenIt
                 </Typography>
             </div>
-            <Button
-                variant="contained"
-                size="medium"
-                sx={{
-                    backgroundColor : "#FF004D",
-                    textAlign : "center",
-                    '&:hover':{
-                        backgroundColor : "#FF004D",
-                    }
-                    
-                }}
-            >
-                Log in
-            </Button>
+            <a href={loginUrl}>
+                <Button
+                    variant="contained"
+                    size="medium"
+                    sx={{
+                        backgroundColor: "#FF004D",
+                        textAlign: "center",
+                        borderRadius: "15px",
+                        width: "250px",
+                        height: "65px",
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        textDecoration: "none",
+                        fontFamily: "Poppins, sans-serif",
+                        "&:hover": {
+                            backgroundColor: "#FF004D",
+                        },
+                    }}
+                >
+                    Log in with Us
+                </Button>
+            </a>
         </Container>
     );
 }
