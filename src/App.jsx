@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import Login from "./components/login";
 import { getAccessTokenFromUrl } from "../server/utils/ListenIt";
 import SpotifyWebApi from "spotify-web-api-js";
+import Player from "./components/player";
 
 const spotify = new SpotifyWebApi();
 
@@ -32,6 +32,13 @@ function App() {
         backgroundColor: "#000000",
       }}
     >
+      {/* {
+        token ? (
+          <Player />
+        ) : (
+          <Login />
+        )
+      } */}
       <Login />
     </div>
   );
