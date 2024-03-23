@@ -1,7 +1,7 @@
 import { Container, Typography } from '@mui/material';
 import React from 'react'
 
-function Player() {
+function Player({ spotify }) {
     return (
         <Container
             sx={{
