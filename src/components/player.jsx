@@ -1,5 +1,9 @@
 import { Container, Typography } from '@mui/material';
-import React from 'react'
+import SideBar from './SideBar';
+import Body from './Body';
+import { Footer } from './Footer';
+
+// TODO : 1. Sidebar, 2. Body, 3. Footer
 
 function Player({ spotify }) {
     return (
@@ -22,6 +26,13 @@ function Player({ spotify }) {
             >
                 Welcome to Listen<span style={{color : "#FF004D"}}>It</span>
             </Typography>
+            <div className="player-body">
+                <SideBar />
+                <Body />
+            </div>
+            <div className="footer">
+                <Footer />
+            </div>
         </Container>
     )
 }
