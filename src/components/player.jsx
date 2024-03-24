@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import SideBar from './SideBar';
 import Body from './Body';
 import { Footer } from './Footer';
@@ -7,34 +7,41 @@ import { Footer } from './Footer';
 
 function Player({ spotify }) {
     return (
-        <Container
-            sx={{
-                display : "flex",
+        <div
+            style={{
+                display: "flex",
                 flexDirection : "column",
-                alignItems : "center",
-                justifyContent : "space-evenly",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                width : "100%",
+                height : "100%"
             }}
         >
-            <Typography
-                sx={{
-                    textAlign : "center",
-                    fontWeight : "bold",
-                    fontSize : "2rem",
-                    fontFamily : "Poppins, sans-serif",
-                    pt : "2rem"
+            <div
+                className='main-container'
+                style={{
+                    display : 'flex',
+                    width : "100%",
+                    height : "80%"
                 }}
             >
-                Welcome to Listen<span style={{color : "#FF004D"}}>It</span>
-            </Typography>
-            <div className="player-body">
                 <SideBar />
                 <Body />
             </div>
-            <div className="footer">
+            <div
+                className='footer-container'
+                style={{
+                    width : "100%",
+                    alignSelf : 'center',
+                    height : "20%"
+                }}
+            >
                 <Footer />
             </div>
-        </Container>
+        </div>
     )
 }
 
 export default Player;
+
+
