@@ -20,6 +20,3 @@ function Body() {
 }
 
 export default Body;
-
-
-//backgroundColor: "linear - gradient(90deg, rgba(2, 0, 36, 1) 0 %, rgba(255, 0, 77, 1) 70 %)",

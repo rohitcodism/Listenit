@@ -13,14 +13,16 @@ function App() {
   const [{ user, token }, dispatch] = StateProviderValue();
 
   useEffect(() => {
-    const token = getAccessTokenFromUrl();
+    const Token = getAccessTokenFromUrl();
     window.location.hash = "";
-    const _Token = token?.access_token;
+    const _Token = Token?.access_token;
+
+    console.log("token : ", _Token);
 
     if (_Token) {
       setAToken(_Token);
 
-      if(token){
+      if(aToken){
         dispatch({
           type: "SET_TOKEN",
           token: _Token,
@@ -37,7 +39,17 @@ function App() {
           user: user,
 
         })
+      });
+
+
+      //* Getting user Playlists */
+      spotify.getUserPlaylists().then((playlists) => {
+        dispatch({
+          type : 'SET_PLAYLISTS',
+          playlists : playlists,
+        })
       })
+
     }
   }, []);
 
