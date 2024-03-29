@@ -1,6 +1,7 @@
 import { Container } from '@mui/material';
+import { Header } from './Header';
 
-function Body() {
+function Body({ spotify }) {
     return (
         <Container
             sx={{
@@ -15,6 +16,7 @@ function Body() {
             className='body'
         >
             Body
+            <Header spotify={spotify} />
         </Container>
     )
 }

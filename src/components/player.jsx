@@ -26,7 +26,7 @@ function Player({ spotify }) {
                 }}
             >
                 <SideBar />
-                <Body />
+                <Body spotify={spotify} />
             </div>
             <div
                 className='footer-container'
