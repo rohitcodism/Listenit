@@ -1,8 +1,13 @@
 import { useState } from 'react';
 import { Shuffle, PlayCircle, SkipBack, SkipForward, Repeat, ListPlus, Volume1, Volume2, VolumeX } from "lucide-react";
 import { Grid, Slider } from '@mui/material';
+import { StateProviderValue } from '../context/StateProvider';
 
 export const Footer = () => {
+
+    const[{track}, dispatch] = StateProviderValue();
+    console.log("Track got in the footer : ",track);
+    
     const [hoveredIconIndex, setHoveredIconIndex] = useState(null);
 
     const handleIconHover = (index) => {
@@ -48,8 +53,8 @@ export const Footer = () => {
                     }}
                 >
                     <img 
-                        src="https://search.brave.com/images?q=Despacito&context=W3sic3JjIjoiaHR0cHM6Ly91cGxvYWQud2lraW1lZGlhLm9yZy93aWtpcGVkaWEvZW4vdGh1bWIvYy9jOC9MdWlzX0ZvbnNpX0ZlYXQuX0RhZGR5X1lhbmtlZV8tX0Rlc3BhY2l0b18lMjhPZmZpY2lhbF9TaW5nbGVfQ292ZXIlMjkucG5nLzUxMnB4LUx1aXNfRm9uc2lfRmVhdC5fRGFkZHlfWWFua2VlXy1fRGVzcGFjaXRvXyUyOE9mZmljaWFsX1NpbmdsZV9Db3ZlciUyOS5wbmciLCJ0ZXh0IjoiTHVpc19Gb25zaV9GZWF0Ll9EYWRkeV9ZYW5rZWVfLV9EZXNwYWNpdG9fKE9mZmljaWFsX1NpbmdsZV9Db3ZlcikucG5nIiwicGFnZV91cmwiOiJodHRwczovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9EZXNwYWNpdG8ifV0%3D&sig=f3c0f4d0347393ca0b3068b30a6980c27a738f4284792d7896add7e8ad05e6a7&nonce=3f66c1647427acfb565503f548880606" 
-                        alt="music-image" 
+                        src={track?.album?.images[0].url}
+                        alt="" 
                         style={{
                             height : "60px",
                             width : "60px",
@@ -66,9 +71,9 @@ export const Footer = () => {
                                 color : "#FF004D"
                             }}
                         >
-                            Despacito
+                            {track?.name}
                         </h4>
-                        <p>Justine Bieber</p>
+                        <p>{track?.artists[0]?.name}</p>
                     </div>
                 </div>
 

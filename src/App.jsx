@@ -50,6 +50,14 @@ function App() {
         })
       })
 
+      //* Getting Playlist By Id */
+      spotify.getPlaylist("37i9dQZF1Epo6LFoE2vhaa").then((res) => 
+        dispatch({
+          type : "SET_DISCOVER_WEEKLY",
+          discover_weekly: res,
+        })
+      )
+
     }
   }, []);
 

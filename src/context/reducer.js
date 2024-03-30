@@ -7,6 +7,7 @@ export const initialState = {
     item : null,
     token : null,
     //TODO : Remove the access token after development.
+    track  : null,
 }
 
 const reducer = (state, action) => {
@@ -29,6 +30,17 @@ const reducer = (state, action) => {
             return{
                 ...state,
                 playlists: action.playlists,
+            }
+        case 'SET_DISCOVER_WEEKLY':
+            return{
+                ...state,
+                discover_weekly: action.discover_weekly,
+            }
+        case 'SET_TRACK':
+            console.log("Setted Track : ", action.track);
+            return{
+                ...state,
+                track: action.track,
             }
 
         default:
