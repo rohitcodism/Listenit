@@ -1,64 +1,60 @@
-import { Avatar } from "@mui/material";
+import { Avatar, InputAdornment, InputBase, Paper } from "@mui/material";
 import { Search } from "lucide-react";
 import { StateProviderValue } from "../context/StateProvider";
 
-
 export const Header = ({ spotify }) => {
+    const [{ user }, dispatch] = StateProviderValue();
 
-    const [{user}, dispatch] = StateProviderValue();
-
-    return(
+    return (
         <div
             className="body-header"
             style={{
-                display : "flex",
-                justifyContent : "space-between",
-                marginBottom : "30px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "30px",
             }}
         >
-            <div 
-                className="header-left"
+            <Paper
+                component="form"
+                elevation={3}
                 style={{
-                    flex : 0.5,
-                    minWidth : "70px",
-                    backgroundColor : "white",
-                    color : "#FF004D",
-                    borderRadius : "30px",
-                    display : "flex",
-                    alignItems : "center",
-                    padding : "10px",
-
+                    flex: 0.5,
+                    borderRadius: "30px",
+                    backgroundColor: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "5px 10px",
                 }}
             >
-                <Search />
-                <input 
-                    placeholder="Search for artists, songs and podcasts"         
-                    type="text"
+                <Search
                     style={{
-                        border : "none",
-                        width : "100%"
+                        color: "#FF004D",
+                        marginRight: "10px",
+                        marginLeft: "5px",
                     }}
                 />
-            </div>
-            <div 
+                <InputBase
+                    placeholder="Search for artists, songs and podcasts"
+                    style={{
+                        flexGrow: 1,
+                    }}
+                />
+            </Paper>
+            <div
                 className="header-right"
                 style={{
-                    display : "flex",
-                    alignItems : "center",
+                    display: "flex",
+                    alignItems: "center",
                 }}
             >
-                <Avatar 
+                <Avatar
                     src={user?.images[0]?.url}
                     alt={user?.display_name}
+                    style={{ marginRight: "10px" }}
                 />
-                <h4
-                    style={{
-                        marginLeft : "10px"
-                    }}
-                >
-                    {user?.display_name}
-                </h4>
+                <h4>{user?.display_name}</h4>
             </div>
         </div>
     );
-}
+};
