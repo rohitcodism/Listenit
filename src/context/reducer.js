@@ -8,6 +8,12 @@ export const initialState = {
     token : null,
     //TODO : Remove the access token after development.
     track  : null,
+    playerState : null,
+    currentlyPlaying : null,
+    userClickedPlaylistId : null,
+    userClickedPlaylist : null,
+    discover_weekly : null,
+    featuredPlaylists : null,
 }
 
 const reducer = (state, action) => {
@@ -42,6 +48,33 @@ const reducer = (state, action) => {
                 ...state,
                 track: action.track,
             }
+        case 'SET_PLAYER_STATE':
+            return{
+                ...state,
+                playerState : action.playerState,
+            }
+        case 'SET_PLAYING':
+            return{
+                ...state,
+                currentlyPlaying : action.currentlyPlaying,
+            }
+        case 'SET_USER_CLICKED_PLAYLIST_ID':
+            return{
+                ...state,
+                userClickedPlaylistId : action.userClickedPlaylistId,
+            }
+        case 'SET_USER_CLICKED_PLAYLIST':
+            console.log("Setting user clicked playlist : ", action.userClickedPlaylist)
+            return{
+                ...state,
+                userClickedPlaylist : action.userClickedPlaylist,
+            }
+        case 'SET_FEATURED_PLAYLISTS':
+            return{
+                ...state,
+                featuredPlaylists : action.featuredPlaylists,
+            }
+
 
         default:
             console.log(action.type);
