@@ -10,7 +10,7 @@ const spotify = new SpotifyWebApi();
 function App() {
   const [aToken, setAToken] = useState(" ");
 
-  const [{ user, token }, dispatch] = StateProviderValue();
+  const [{ user, token, userCLickedPlaylistId }, dispatch] = StateProviderValue();
 
   useEffect(() => {
     const Token = getAccessTokenFromUrl();
@@ -43,7 +43,8 @@ function App() {
 
 
       //* Getting user Playlists */
-      spotify.getUserPlaylists().then((playlists) => {
+      spotify.getUserPlaylists(userCLickedPlaylistId).then((playlists) => {
+        console.log("playlists : ", playlists);
         dispatch({
           type : 'SET_PLAYLISTS',
           playlists : playlists,
@@ -51,12 +52,13 @@ function App() {
       })
 
       //* Getting Playlist By Id */
-      spotify.getPlaylist("37i9dQZF1Epo6LFoE2vhaa").then((res) => 
+      spotify.getPlaylist(userCLickedPlaylistId).then((res) => {
+        console.log("res : ", res),
         dispatch({
-          type : "SET_DISCOVER_WEEKLY",
-          discover_weekly: res,
+          type : "SET_USER_CLICKED_PLAYLIST",
+          userCLickedPlaylist: res,
         })
-      )
+      })
 
     }
   }, []);
