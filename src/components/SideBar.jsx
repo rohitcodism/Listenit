@@ -3,12 +3,51 @@ import { Logo } from './Logo';
 import { SideBarOptions } from './SideBarOptions';
 import { Home, Search, LibraryMusic } from '@mui/icons-material';
 import { StateProviderValue } from '../context/StateProvider';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 function SideBar() {
 
-    const [{playlists}, dispatch] = StateProviderValue()
+
+
+    const [{playlists, featuredPlaylists, token}, dispatch] = StateProviderValue();
+
+        const featPlaylists = async() => {
+            const res = await axios.get(
+                `https://api.spotify.com/v1/browse/featured-playlists`,
+                {
+                    headers: {
+                        Authorization: "Bearer " + token,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            return res;
+        }
+
+        useEffect(() => {
+            featPlaylists().then((res) =>{
+                console.log("Response  for Featured Playlists : ", res);
+                dispatch({
+                    type: "SET_FEATURED_PLAYLISTS",
+                    featuredPlaylists: res.data.playlists.items,
+                });
+            }).catch((err) =>{
+                console.log("Error in fetching Featured Playlists : ", err);
+            });
+        }, [])
+
+    console.log("Featured Playlists : ", featuredPlaylists);
 
     playlists && console.log(playlists);
+
+    const handlePlaylistClicked = (playlistId) => {
+        console.log("Playlist ID : ", playlistId);
+        dispatch({
+            type: "SET_USER_CLICKED_PLAYLIST_ID",
+            userClickedPlaylistId: playlistId,
+        });
+    } 
 
     return (
         <Container
@@ -23,6 +62,7 @@ function SideBar() {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                overflowY : "auto",
             }}
             className='sidebar'
         >
@@ -58,7 +98,21 @@ function SideBar() {
                 />
             </div>
             {playlists?.items?.map((playlist) => (
-                <SideBarOptions key={playlist.name}  title={playlist.name}/>
+                <div
+                    key={playlist.id}
+                    onClick={() => handlePlaylistClicked(playlist.id)}
+                >
+                    <SideBarOptions  key={playlist.name}  title={playlist.name}/>
+                </div>
+            ))}
+            {
+                featuredPlaylists?.map((playlist) => (
+                    <div
+                        key={playlist.name} 
+                        onClick={() => handlePlaylistClicked(playlist.id)}
+                    >
+                        <SideBarOptions title={playlist.name}/>
+                    </div>
             ))}
         </Container>
     )
