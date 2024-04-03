@@ -8,10 +8,41 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { FavoriteBorder, PauseCircleFilled } from '@mui/icons-material';
 import { Track } from './Track';
+import axios from 'axios';
+
 
 function Body({ spotify }) {
-    const [{ discover_weekly }, dispatch] = StateProviderValue();
-    const tracks = discover_weekly?.tracks?.items;
+    const [{ discover_weekly, userClickedPlaylist, userClickedPlaylistId, token }, dispatch] = StateProviderValue();
+
+    const fetchPlaylistById = async () => {
+        axios.get(`https://api.spotify.com/v1/playlists/${userClickedPlaylistId}`,
+        {
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+        } 
+        ).then((res) => {
+            console.log("" + res.data);
+            dispatch({
+                type: "SET_USER_CLICKED_PLAYLIST",
+                userClickedPlaylist: res.data,
+            })
+        }).catch((err) => {
+            console.log("" + err);
+        })
+    }
+
+    useEffect(() => {
+        if (userClickedPlaylistId) {
+            fetchPlaylistById();
+        }
+    }, [userClickedPlaylistId])
+
+
+    const shownPlaylist = userClickedPlaylist;
+
+    const tracks = shownPlaylist?.tracks?.items;
 
 
 
@@ -60,7 +91,7 @@ function Body({ spotify }) {
                 <Grid item container justifyContent="center" alignItems="center" spacing={2}>
                     <Grid item>
                         <img
-                            src={discover_weekly?.images[0]?.url}
+                            src={shownPlaylist?.images[0]?.url}
                             alt=""
                             style={{
                                 width: "150px", // Adjust image size
@@ -72,9 +103,9 @@ function Body({ spotify }) {
                     </Grid>
                     <Grid item xs={12} md={6} lg={8}>
                         <div className="body-infoText">
-                            <strong>{discover_weekly?.type}</strong>
-                            <h2>{discover_weekly?.name}</h2>
-                            <p>{discover_weekly?.description}</p>
+                            <strong>{shownPlaylist?.type}</strong>
+                            <h2>{shownPlaylist?.name}</h2>
+                            <p>{shownPlaylist?.description}</p>
                         </div>
                     </Grid>
                     <Grid item xs={12} md={6} lg={2}>

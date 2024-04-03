@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Shuffle, PlayCircle, SkipBack, SkipForward, Repeat, ListPlus, Volume1, Volume2, VolumeX } from "lucide-react";
 import { Grid, Slider } from '@mui/material';
 import { StateProviderValue } from '../context/StateProvider';
+import axios from 'axios';
 
 export const Footer = () => {
 
-    const[{track}, dispatch] = StateProviderValue();
-    console.log("Track got in the footer : ",track);
+    const[{track, playerState, token}, dispatch] = StateProviderValue();
     
     const [hoveredIconIndex, setHoveredIconIndex] = useState(null);
 
@@ -17,6 +17,53 @@ export const Footer = () => {
     const handleIconLeave = () => {
         setHoveredIconIndex(null);
     };
+
+    //* API Calls */
+    const changeTrack = async(type) => {
+        console.log("Api call made for  : ",type);
+        await axios.post(
+            `https://api.spotify.com/v1/me/player/${type}`,{},
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        
+        const res = axios.get(
+            `https://api.spotify.com/v1/me/player/currently-playing`,
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type" : "application/json"
+                },
+            }
+        );
+    
+        if(res.data !== ""){
+            const {item} = res.data;
+            const currentlyPlaying = {
+                id : item.id,
+                name : item.name,
+                artists : item.artists.map((artist) => artist.name),
+                image : item.album.images[0].url,
+            };
+            dispatch(
+                {
+                    type : 'SET_PLAYING',
+                    currentlyPlaying,
+                }
+            )
+        }else{
+            dispatch(
+                {
+                    type : 'SET_PLAYING',
+                    currentlyPlaying : null,
+                }
+            )
+        }
+    }
 
     return (
         <div
@@ -108,6 +155,7 @@ export const Footer = () => {
                         }}
                         onMouseEnter={() => handleIconHover(1)}
                         onMouseLeave={handleIconLeave}
+                        onClick={() => changeTrack('previous')}
                     />
                     <PlayCircle
                         size={27}
@@ -128,6 +176,7 @@ export const Footer = () => {
                         }}
                         onMouseEnter={() => handleIconHover(3)}
                         onMouseLeave={handleIconLeave}
+                        onClick={() => changeTrack('next')}
                     />
                     <Repeat
                         size={20}
