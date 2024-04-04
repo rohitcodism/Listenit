@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Shuffle, PlayCircle, SkipBack, SkipForward, Repeat, ListPlus, Volume1, Volume2, VolumeX } from "lucide-react";
+import { Shuffle, PlayCircle, SkipBack, SkipForward, Repeat, ListPlus, Volume1, Volume2, VolumeX, CirclePause} from "lucide-react";
 import { Grid, Slider } from '@mui/material';
 import { StateProviderValue } from '../context/StateProvider';
 import axios from 'axios';
@@ -9,6 +9,8 @@ export const Footer = () => {
     const[{track, playerState, token}, dispatch] = StateProviderValue();
     
     const [hoveredIconIndex, setHoveredIconIndex] = useState(null);
+
+    const[playButtonCLicked, setPlayButtonClicked] = useState(false);
 
     const handleIconHover = (index) => {
         setHoveredIconIndex(index);
@@ -63,6 +65,47 @@ export const Footer = () => {
                 }
             )
         }
+    }
+
+    // Play track with given track url from player
+    const playTrack = async (trackUrl) => {
+        const requestBody = {
+            context_uri: trackUrl,
+            offset: {
+                position: 5,
+            },
+            position_ms: 0,
+        };
+
+        await axios.put(`https://api.spotify.com/v1/me/player/play`, requestBody,
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+            });
+    }
+
+    // Pause track with given track url from player
+    const pauseTrack = async () => {
+        await axios.put(
+            `https://api.spotify.com/v1/me/player/pause`,{},
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                }
+            }
+            
+        )
+    }
+
+    const handlePlayButtonClick = async () => {
+        await playTrack(track?.uri)
+    }
+
+    const handlePauseButtonClick = async () => {
+        await pauseTrack();
     }
 
     return (
@@ -157,7 +200,7 @@ export const Footer = () => {
                         onMouseLeave={handleIconLeave}
                         onClick={() => changeTrack('previous')}
                     />
-                    <PlayCircle
+                    {!playButtonCLicked ? (<PlayCircle
                         size={27}
                         style={{
                             transition: "color 0.3s ease",
@@ -166,7 +209,20 @@ export const Footer = () => {
                         }}
                         onMouseEnter={() => handleIconHover(2)}
                         onMouseLeave={handleIconLeave}
-                    />
+                        onClick={() => {setPlayButtonClicked(!playButtonCLicked); handlePlayButtonClick();}}
+                    />) : (
+                        <CirclePause
+                            size={27}
+                            style={{
+                                transition: "color 0.3s ease",
+                                color: hoveredIconIndex === 2 ? "#FF004D" : "white",
+                                cursor: "pointer",
+                            }}
+                            onMouseEnter={() => handleIconHover(2)}
+                            onMouseLeave={handleIconLeave}
+                            onClick={() => {setPlayButtonClicked(!playButtonCLicked); handlePauseButtonClick();}}
+                        />
+                    )}
                     <SkipForward
                         size={20}
                         style={{
