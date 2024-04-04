@@ -66,7 +66,7 @@ export const Footer = () => {
     }
 
     return (
-        <div
+        track ? <div
             style={{
                 position: "fixed",
                 bottom: "20px", // Adjust the distance from the bottom as needed
@@ -248,7 +248,7 @@ export const Footer = () => {
                     </Grid>
                 </div>
             </div>
-        </div>
+        </div> : null
     );
 };
 

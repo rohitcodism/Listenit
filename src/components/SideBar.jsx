@@ -63,6 +63,7 @@ function SideBar() {
                 flexDirection: "column",
                 alignItems: "center",
                 overflowY : "auto",
+                gap : ".8rem",
             }}
             className='sidebar'
         >
@@ -101,6 +102,12 @@ function SideBar() {
                 <div
                     key={playlist.id}
                     onClick={() => handlePlaylistClicked(playlist.id)}
+                    style={{
+                        cursor: "pointer",
+                        alignSelf: "start",
+                        width : "100%",
+                    }}
+                    className='userPlaylist'
                 >
                     <SideBarOptions  key={playlist.name}  title={playlist.name}/>
                 </div>
@@ -110,6 +117,12 @@ function SideBar() {
                     <div
                         key={playlist.name} 
                         onClick={() => handlePlaylistClicked(playlist.id)}
+                        style={{
+                            cursor: "pointer",
+                            alignSelf: "start", 
+                            width : "100%",
+                        }}
+                        className='featuredPlaylist'
                     >
                         <SideBarOptions title={playlist.name}/>
                     </div>

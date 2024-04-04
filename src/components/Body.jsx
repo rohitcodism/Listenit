@@ -14,14 +14,16 @@ import axios from 'axios';
 function Body({ spotify }) {
     const [{ discover_weekly, userClickedPlaylist, userClickedPlaylistId, token }, dispatch] = StateProviderValue();
 
+    // Fetch playlist by id that user clicked on from sidebar
+
     const fetchPlaylistById = async () => {
         axios.get(`https://api.spotify.com/v1/playlists/${userClickedPlaylistId}`,
-        {
-            headers: {
-                Authorization: "Bearer " + token,
-                "Content-Type": "application/json",
-            },
-        } 
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+            }
         ).then((res) => {
             console.log("" + res.data);
             dispatch({
@@ -33,11 +35,40 @@ function Body({ spotify }) {
         })
     }
 
+
+    // Play track with given track url from player
+    const playTrack = async (trackUrl) => {
+        const requestBody = {
+            context_uri: trackUrl,
+            offset: {
+                position: 5,
+            },
+            position_ms: 0,
+        };
+
+        await axios.put(`https://api.spotify.com/v1/me/player/play`, requestBody,
+            {
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+            });
+    }
+
+
     useEffect(() => {
         if (userClickedPlaylistId) {
             fetchPlaylistById();
         }
-    }, [userClickedPlaylistId])
+    }, [userClickedPlaylistId]);
+
+    const handleTrackClick = async (trackUrl) => {
+
+        console.log("Track clicked : ", trackUrl);
+
+        await playTrack(trackUrl);
+
+    }
 
 
     const shownPlaylist = userClickedPlaylist;
@@ -59,18 +90,7 @@ function Body({ spotify }) {
         })
     }, [selectedTrack])
 
-    const playTrack = (previewUrl) => {
 
-        console.log("URL got in Player : ",previewUrl)
-
-        const audio = new Audio(previewUrl);
-
-        audio.currentTime = 0;
-
-        audio.play();
-    }
-
-    
 
     return (
         <Container
@@ -86,85 +106,87 @@ function Body({ spotify }) {
             }}
             className='body'
         >
-            <Header spotify={spotify} />
-            <Grid container direction="column" spacing={2}>
-                <Grid item container justifyContent="center" alignItems="center" spacing={2}>
-                    <Grid item>
-                        <img
-                            src={shownPlaylist?.images[0]?.url}
-                            alt=""
-                            style={{
-                                width: "150px", // Adjust image size
-                                height: "150px", // Adjust image size
-                                objectFit: "contain",
-                                boxShadow: "0 4px 60px rgba(0, 0 ,0 , 0.5)"
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={8}>
-                        <div className="body-infoText">
-                            <strong>{shownPlaylist?.type}</strong>
-                            <h2>{shownPlaylist?.name}</h2>
-                            <p>{shownPlaylist?.description}</p>
-                        </div>
-                    </Grid>
-                    <Grid item xs={12} md={6} lg={2}>
-                        <div className="body-icons" style={{ display: "flex", alignItems: "center" }}>
-                            <motion.div
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={() => setPlayButtonClicked(!playButtonClicked)}
+            { shownPlaylist ? (<div>
+                <Header spotify={spotify} />
+                <Grid container direction="column" spacing={2}>
+                    <Grid item container justifyContent="center" alignItems="center" spacing={2}>
+                        <Grid item>
+                            <img
+                                src={shownPlaylist?.images[0]?.url}
+                                alt=""
                                 style={{
-                                    cursor: "pointer",
+                                    width: "150px", // Adjust image size
+                                    height: "150px", // Adjust image size
+                                    objectFit: "contain",
+                                    boxShadow: "0 4px 60px rgba(0, 0 ,0 , 0.5)"
                                 }}
-                            >
-                                {playButtonClicked ?
-                                    <PauseCircleFilled
-                                        sx={{
-                                            fontSize: "80px",
-                                            marginRight: "20px"
-                                        }}
-                                    />
-                                    : <PlayCircleFilledIcon
-                                        sx={{
-                                            fontSize: '80px',
-                                            marginRight: "20px"
-                                        }}
-                                    />
-                                }
-                            </motion.div>
-                            <motion.div
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={() => setHeartClicked(!heartClicked)}
-                                sx={{ cursor: "pointer" }}
-                            >
-                                {!heartClicked ?
-                                    <FavoriteBorder
-                                        fontSize="large"
-                                        sx={{
-                                            marginRight: "20px"
-                                        }}
-                                    />
-                                    : <FavoriteIcon
-                                        fontSize="large"
-                                        sx={{
-                                            marginRight: "20px"
-                                        }}
-                                    />
-                                }
-                            </motion.div>
-                            <MoreHorizIcon fontSize="large" />
-                        </div>
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={8}>
+                            <div className="body-infoText">
+                                <strong>{shownPlaylist?.type}</strong>
+                                <h2>{shownPlaylist?.name}</h2>
+                                <p>{shownPlaylist?.description}</p>
+                            </div>
+                        </Grid>
+                        <Grid item xs={12} md={6} lg={2}>
+                            <div className="body-icons" style={{ display: "flex", alignItems: "center" }}>
+                                <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => setPlayButtonClicked(!playButtonClicked)}
+                                    style={{
+                                        cursor: "pointer",
+                                    }}
+                                >
+                                    {playButtonClicked ?
+                                        <PauseCircleFilled
+                                            sx={{
+                                                fontSize: "80px",
+                                                marginRight: "20px"
+                                            }}
+                                        />
+                                        : <PlayCircleFilledIcon
+                                            sx={{
+                                                fontSize: '80px',
+                                                marginRight: "20px"
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
+                                <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => setHeartClicked(!heartClicked)}
+                                    sx={{ cursor: "pointer" }}
+                                >
+                                    {!heartClicked ?
+                                        <FavoriteBorder
+                                            fontSize="large"
+                                            sx={{
+                                                marginRight: "20px"
+                                            }}
+                                        />
+                                        : <FavoriteIcon
+                                            fontSize="large"
+                                            sx={{
+                                                marginRight: "20px"
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
+                                <MoreHorizIcon fontSize="large" />
+                            </div>
+                        </Grid>
+                    </Grid>
+                    <Grid item>
+                        {tracks?.map((track) => (
+                            <Track key={track?.id} track={track?.track} setSelectedTrack={setSelectedTrack} handleTrackClick={handleTrackClick} />
+                        ))}
                     </Grid>
                 </Grid>
-                <Grid item>
-                    {tracks?.map((track) => (
-                        <Track key={track?.id} track={track?.track} setSelectedTrack={setSelectedTrack} playTrack={playTrack}/>
-                    ))}
-                </Grid>
-            </Grid>
-        </Container>
+            </div>) : null}
+        </Container >
     );
 }
 

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export const Track = ({ track, setSelectedTrack, playTrack }) => {
+export const Track = ({ track, setSelectedTrack, handleTrackClick }) => {
     return (
         <motion.div
             className="song-row"
@@ -18,7 +18,7 @@ export const Track = ({ track, setSelectedTrack, playTrack }) => {
                 cursor: "pointer",
                 backgroundColor: "rgba(0, 0, 0, 0.5)",
             }}
-            onClick={() => {setSelectedTrack(track); playTrack(track?.preview_url)}}
+            onClick={() => {setSelectedTrack(track); handleTrackClick(track?.uri)}}
         >
             <img
                 src={track.album?.images[0]?.url}

@@ -10,7 +10,6 @@ export const SideBarOptions = ({ title, Icon }) => {
                 fontWeight: "bold",
                 fontSize: "1rem",
                 display: "flex",
-                justifyContent: "center",
                 alignItems: "center",
                 alignSelf: "start",
                 height: "45px",
